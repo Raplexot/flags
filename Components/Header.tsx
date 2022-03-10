@@ -3,6 +3,7 @@ import { StyleSheet, View, Linking, TextInput } from 'react-native'
 import { Header as HeaderRNE, Icon } from 'react-native-elements'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import SearchList from './SearchList'
 
 type HeaderComponentProps = {
     title?: string
@@ -24,17 +25,21 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
         setSearchString(value)
     }
     return (
-        // <SafeAreaProvider>
-        <HeaderRNE
-            centerComponent={
-                <TextInput
-                    value={searchString}
-                    onChange={onChangeSearch}
-                    style={styles.area}
-                />
-            }
-        />
-        // </SafeAreaProvider>
+        <SafeAreaProvider>
+            <HeaderRNE
+                centerComponent={
+                    <>
+                        <TextInput
+                            value={searchString}
+                            onChange={onChangeSearch}
+                            style={styles.area}
+                        />
+                        <SearchList filter={searchString} />
+                    </>
+                }
+            />
+            //{' '}
+        </SafeAreaProvider>
     )
 }
 
