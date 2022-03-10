@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import Fuse from 'fuse.js'
-import { FlatList } from 'react-native-gesture-handler'
 import {
     Linking,
-    TouchableWithoutFeedback,
     View,
     Text,
+    Alert,
     StyleSheet,
     TouchableOpacity,
 } from 'react-native'
+import { Actions } from 'react-native-router-flux'
 
-const searchOptions2 = (key: string[]) => ({
-    key: [...key],
-})
 const searchOptions = (keys: string[]) => ({
     shouldSort: true,
     threshold: 0.6,
@@ -22,15 +19,9 @@ const searchOptions = (keys: string[]) => ({
     minMatchCharLength: 1,
     keys: [...keys],
 })
-type Name = {
-    [key: string]: { [key: string]: string }
-}
-interface Country {
-    name: Name
-}
 
 const filterList = (list: any, filter: string) => {
-    if (!filter) return list
+    if (!filter) return []
 
     const fuse = new Fuse(list, searchOptions(['name.common']))
     const result = fuse.search(filter)
@@ -59,10 +50,33 @@ const SearchList = ({ filter }: any) => {
         console.log(list)
     }, [filter, list])
 
-    console.log(filteredList[0])
+    const findCoordinates = () => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lock = ` ${position.coords.latitude},${position.coords.longitude}`
+                console.log(lock)
+                list.filter((it: any) => {
+                    if (
+                        it.latlng[0] > position.coords.latitude &&
+                        it.latlng[1] > position.coords.longitude
+                    ) {
+                        return (
+                            <Text>
+                                {it.flag}
+                                {it.name.common}
+                            </Text>
+                        )
+                    }
+                })
+            },
+            (error) => Alert.alert(error.message),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        )
+    }
 
     return (
         <View style={styles.list}>
+            <Text></Text>
             {filteredList.map((el: any) => {
                 return (
                     <TouchableOpacity
@@ -71,8 +85,8 @@ const SearchList = ({ filter }: any) => {
                     >
                         <View key={el.refIndex}>
                             <Text key={el.refIndex} style={styles.font}>
-                                {el.flag}
-                                {el.name.common}
+                                {el.item.flag}
+                                {el.item.name.common}
                             </Text>
                         </View>
                     </TouchableOpacity>

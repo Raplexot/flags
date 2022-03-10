@@ -54,38 +54,3 @@ const styles = StyleSheet.create({
 })
 
 export default Header
-
-// headerContainer: {
-//     height: '100%',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#397af8',
-// },
-
-// headerRight: {
-//     display: 'flex',
-//     flexDirection: 'row',
-//     marginTop: 5,
-// },
-
-//     leftComponent={{
-//         icon: 'menu',
-//         color: '#fff',
-//     }}
-//     rightComponent={
-//         <View style={styles.headerRight}>
-//             <TouchableOpacity onPress={docsNavigate}>
-//                 <Icon name="description" color="white" />
-//             </TouchableOpacity>
-//             <TouchableOpacity
-//                 style={{ marginLeft: 10 }}
-//                 onPress={playgroundNavigate}
-//             >
-//                 <Icon
-//                     type="antdesign"
-//                     name="rocket1"
-//                     color="white"
-//                 />
-//             </TouchableOpacity>
-//         </View>
-//     }

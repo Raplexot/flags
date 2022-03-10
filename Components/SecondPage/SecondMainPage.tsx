@@ -1,15 +1,14 @@
-import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import Header from './Components/FirstPage/Header'
-import Body from './Components/Body'
+import { Router, Scene, Actions } from 'react-native-router-flux'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
-export default function App() {
+export default function Country() {
     return (
         <View style={styles.container}>
-            <Header />
-            {/* <Body /> */}
-            <StatusBar style="auto" />
+            <TouchableOpacity>
+                <Text onPress={() => Actions.search}>Hello</Text>
+            </TouchableOpacity>
         </View>
     )
 }
