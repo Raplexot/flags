@@ -7,7 +7,7 @@ export default function Country() {
     return (
         <View style={styles.container}>
             <TouchableOpacity>
-                <Text onPress={() => Actions.search}>Hello</Text>
+                <Text>Hello</Text>
             </TouchableOpacity>
         </View>
     )

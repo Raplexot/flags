@@ -76,7 +76,6 @@ const SearchList = ({ filter }: any) => {
 
     return (
         <View style={styles.list}>
-            <Text></Text>
             {filteredList.map((el: any) => {
                 return (
                     <TouchableOpacity

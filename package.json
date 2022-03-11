@@ -19,6 +19,7 @@
     "expo-cli": "^5.3.0",
     "expo-status-bar": "~1.2.0",
     "fuse.js": "^6.5.3",
+    "lodash": "^4.17.21",
     "prettier": "^2.5.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@types/lodash": "^4.14.179",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
