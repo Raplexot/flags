@@ -1,46 +1,141 @@
-import React, { useCallback, useState } from 'react'
-import { StyleSheet, View, Linking, TextInput } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { StyleSheet, View, Linking, Text, TextInput } from 'react-native'
 import { Header as HeaderRNE, Icon } from 'react-native-elements'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import SearchList from './SearchList'
-import { useMemo } from 'react'
-import { debounce } from 'lodash'
+import { debounce, isArray } from 'lodash'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
-// const debounce = (func: any) => {
-//     let timer: any
-//     return function (...args: any) {
-//         // eslint-disable-next-line @typescript-eslint/no-this-alias
-//         const context = this
-//         if (timer) clearTimeout(timer)
-//         timer = setTimeout(() => {
-//             timer = null
-//             func.apply(context, args)
-//         }, 500)
-//     }
+// const docsNavigate = () => {
+//     Linking.openURL(`https://reactnativeelements.com/docs/${props.view}`)
+// }
+
+// const playgroundNavigate = () => {
+//     Linking.openURL(`https://react-native-elements.js.org/#/${props.view}`)
 // }
 
 type HeaderComponentProps = {
     title?: string
     view?: string
 }
+export interface Welcome {
+    name: Name
+    tld: string[]
+    cca2: string
+    ccn3: string
+    cca3: string
+    cioc: string
+    independent: boolean
+    status: string
+    unMember: boolean
+    currencies: Currencies
+    idd: Idd
+    capital: string[]
+    altSpellings: string[]
+    region: string
+    subregion: string
+    languages: Languages
+    translations: { [key: string]: Translation }
+    latlng: number[]
+    landlocked: boolean
+    borders: string[]
+    area: number
+    demonyms: Demonyms
+    flag: string
+    maps: Maps
+    population: number
+    gini: Gini
+    fifa: string
+    car: Car
+    timezones: string[]
+    continents: string[]
+    flags: string[]
+}
 
+export interface Car {
+    signs: string[]
+    side: string
+}
+
+export interface Currencies {
+    UAH: Uah
+}
+
+export interface Uah {
+    name: string
+    symbol: string
+}
+
+export interface Demonyms {
+    eng: Eng
+    fra: Eng
+}
+
+export interface Eng {
+    f: string
+    m: string
+}
+
+export interface Gini {
+    '2019': number
+}
+
+export interface Idd {
+    root: string
+    suffixes: string[]
+}
+
+export interface Languages {
+    ukr: string
+}
+
+export interface Maps {
+    googleMaps: string
+    openStreetMaps: string
+}
+
+export interface Name {
+    common: string
+    official: string
+    nativeName: NativeName
+}
+
+export interface NativeName {
+    ukr: Translation
+}
+
+export interface Translation {
+    official: string
+    common: string
+}
 const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
-    // const docsNavigate = () => {
-    //     Linking.openURL(`https://reactnativeelements.com/docs/${props.view}`)
-    // }
+    const [searchString, setSearchString] = useState<string>('')
+    const [name, setName] = useState<Welcome[]>([])
 
-    // const playgroundNavigate = () => {
-    //     Linking.openURL(`https://react-native-elements.js.org/#/${props.view}`)
-    // }
-    const [searchString, setSearchString] = useState('')
-
+    const [loading, setLoading] = useState(false)
     const onChangeSearch = (e: any) => {
         const { value } = e.target
         setSearchString(value)
     }
-
     const debouncedSearch = useCallback(debounce(onChangeSearch, 500), [])
+
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true)
+            if (searchString) {
+                const data = await fetch(
+                    `https://restcountries.com/v3/name/${searchString}`
+                ).then((res) => res.json())
+                setName(isArray(data) ? data : [])
+                console.log(data)
+                setLoading(false)
+            } else {
+                setName([])
+                setLoading(false)
+            }
+        }
+        fetchData()
+    }, [searchString])
+
     return (
         <SafeAreaProvider>
             <HeaderRNE
@@ -50,7 +145,18 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
                             onChange={debouncedSearch}
                             style={styles.area}
                         />
-                        <SearchList filter={searchString} />
+                        <View style={styles.text}>
+                            {name.map((name) => {
+                                return (
+                                    <TouchableOpacity>
+                                        <Text>
+                                            {name.flag}
+                                            {name.name.common}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )
+                            })}
+                        </View>
                     </>
                 }
             />
@@ -67,41 +173,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         textAlign: 'center',
     },
+    text: { backgroundColor: 'white', width: '100%', textAlign: 'center' },
 })
 
 export default Header
-
-// headerContainer: {
-//     height: '100%',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#397af8',
-// },
-
-// headerRight: {
-//     display: 'flex',
-//     flexDirection: 'row',
-//     marginTop: 5,
-// },
-
-//     leftComponent={{
-//         icon: 'menu',
-//         color: '#fff',
-//     }}
-//     rightComponent={
-//         <View style={styles.headerRight}>
-//             <TouchableOpacity onPress={docsNavigate}>
-//                 <Icon name="description" color="white" />
-//             </TouchableOpacity>
-//             <TouchableOpacity
-//                 style={{ marginLeft: 10 }}
-//                 onPress={playgroundNavigate}
-//             >
-//                 <Icon
-//                     type="antdesign"
-//                     name="rocket1"
-//                     color="white"
-//                 />
-//             </TouchableOpacity>
-//         </View>
-//     }
