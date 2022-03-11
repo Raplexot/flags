@@ -4,6 +4,7 @@ import { Header as HeaderRNE, Icon } from 'react-native-elements'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { debounce, isArray } from 'lodash'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Actions } from 'react-native-router-flux'
 
 // const docsNavigate = () => {
 //     Linking.openURL(`https://reactnativeelements.com/docs/${props.view}`)
@@ -148,7 +149,9 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
                         <View style={styles.text}>
                             {name.map((name) => {
                                 return (
-                                    <TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() => Actions.secondMainPage()}
+                                    >
                                         <Text>
                                             {name.flag}
                                             {name.name.common}
