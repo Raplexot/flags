@@ -12,7 +12,7 @@ class App extends Component {
             <Router>
                 <Scene key="root">
                     <Scene
-                        sceneStyle={styles.container}
+                        style={styles?.container}
                         key="firstMainPage"
                         component={FirstMainPage}
                         title="Search"
@@ -20,7 +20,7 @@ class App extends Component {
                     />
 
                     <Scene
-                        sceneStyle={styles.container}
+                        style={styles?.container}
                         key="secondMainPage"
                         component={SecondMainPage}
                         title="Country"
