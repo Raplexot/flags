@@ -1,20 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { StyleSheet, View, Linking, Text, TextInput, Alert } from 'react-native'
-import { Header as HeaderRNE, Icon } from 'react-native-elements'
+import { StyleSheet, View, Text, TextInput, Alert } from 'react-native'
+import { Header as HeaderRNE } from 'react-native-elements'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { debounce, isArray } from 'lodash'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Actions } from 'react-native-router-flux'
 import * as RNLocalize from 'react-native-localize'
-import { $mobx } from 'mobx'
-
-// const docsNavigate = () => {
-//     Linking.openURL(`https://reactnativeelements.com/docs/${props.view}`)
-// }
-
-// const playgroundNavigate = () => {
-//     Linking.openURL(`https://react-native-elements.js.org/#/${props.view}`)
-// }
 
 type HeaderComponentProps = {
     title?: string
@@ -22,64 +13,12 @@ type HeaderComponentProps = {
 }
 export interface Welcome {
     name: Name
-    tld: string[]
-    cca2: string
-    ccn3: string
-    cca3: string
-    cioc: string
-    independent: boolean
-    status: string
-    unMember: boolean
-    currencies: Currencies
     idd: Idd
     capital: string[]
-    altSpellings: string[]
-    region: string
-    subregion: string
     languages: Languages
-    translations: { [key: string]: Translation }
-    latlng: number[]
-    landlocked: boolean
-    borders: string[]
-    area: number
-    demonyms: Demonyms
     flag: string
-    maps: Maps
     population: number
-    gini: Gini
-    fifa: string
-    car: Car
-    timezones: string[]
-    continents: string[]
     flags: string[]
-}
-
-export interface Car {
-    signs: string[]
-    side: string
-}
-
-export interface Currencies {
-    UAH: Uah
-}
-
-export interface Uah {
-    name: string
-    symbol: string
-}
-
-export interface Demonyms {
-    eng: Eng
-    fra: Eng
-}
-
-export interface Eng {
-    f: string
-    m: string
-}
-
-export interface Gini {
-    '2019': number
 }
 
 export interface Idd {
@@ -89,11 +28,6 @@ export interface Idd {
 
 export interface Languages {
     ukr: string
-}
-
-export interface Maps {
-    googleMaps: string
-    openStreetMaps: string
 }
 
 export interface Name {
@@ -112,11 +46,9 @@ export interface Translation {
 }
 const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
     const [searchString, setSearchString] = useState<string>('')
-    const [name, setName] = useState<Welcome[]>([])
+    const [countries, setCountries] = useState<Welcome[]>([])
     const [loading, setLoading] = useState(false)
 
-    // AIzaSyDQlnq2ZSWoqyTwRR_MCXWccQGGNK7uRyo
-    // https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
     const findCoordinates = () => {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -129,11 +61,6 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
     }
     const cords = findCoordinates()
     console.log(cords)
-    fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=48.5916672,34.5636864&key=AIzaSyDQlnq2ZSWoqyTwRR_MCXWccQGGNK7uRyo`
-    )
-        .then((res) => res.json())
-        .then((res) => console.log(res))
 
     const onChangeSearch = (e: any) => {
         const { value } = e.target
@@ -148,11 +75,11 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
                 const data = await fetch(
                     `https://restcountries.com/v3/name/${searchString}`
                 ).then((res) => res.json())
-                setName(isArray(data) ? data : [])
+                setCountries(isArray(data) ? data : [])
                 console.log(data)
                 setLoading(false)
             } else {
-                setName([])
+                setCountries([])
                 setLoading(false)
             }
         }
@@ -171,10 +98,12 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
                             style={styles.area}
                         />
                         <View style={styles.text}>
-                            {name.map((name) => {
+                            {countries.map((name) => {
                                 return (
                                     <TouchableOpacity
-                                        onPress={() => Actions.secondMainPage()}
+                                        onPress={() => {
+                                            Actions.jump('country', name)
+                                        }}
                                     >
                                         <Text>
                                             {name.flag}

@@ -127,56 +127,11 @@ const SearchList = ({ filter }: any) => {
         fetchData()
     }, [search])
 
-    // const filterList = (list: any, filter: string) => {
-    //     if (!filter) return []
-
-    //     const fuse = new Fuse(list, searchOptions(['name.common']))
-    //     const result = fuse.search(filter)
-
-    //     return result
-    // }
-
-    // const fetchList = async (url: string) => {
-    //     const res = await fetch(url)
-    //     return await res.json()
-    // }
-
-    //     const [list, setList] = useState([])
-    //     const [filteredList, setFilteredList] = useState<any>([])
-    //     const url = 'https://restcountries.com/v3.1/all'
-    //     const playgroundNavigate = () => {
-    //         Linking.openURL(`https://react-native-elements.js.org`)
-    //     }
-    //     useEffect(() => {
-    //         fetchList(url).then((data) => setList(data))
-    //     }, [url])
-
-    //     useEffect(() => {
-    //         setFilteredList(filterList(list, filter))
-    //         console.log(list)
-    //     }, [filter, list])
-
-    // AIzaSyDQlnq2ZSWoqyTwRR_MCXWccQGGNK7uRyo
-    // https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
-    const findCoordinates = () => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lock = ` ${position.coords.latitude},${position.coords.longitude}`
-                console.log(lock)
-            },
-            (error) => Alert.alert(error.message),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        )
-    }
-    console.log(findCoordinates())
     return (
         <View style={styles.list}>
             {name.map((el: any) => {
                 return (
-                    <TouchableOpacity
-                        key={el.refIndex}
-                        // onPress={playgroundNavigate}
-                    >
+                    <TouchableOpacity key={el.refIndex}>
                         <View key={el.refIndex}>
                             <Text key={el.refIndex} style={styles.font}>
                                 {el.flag}
@@ -186,15 +141,6 @@ const SearchList = ({ filter }: any) => {
                     </TouchableOpacity>
                 )
             })}
-            {/* <FlatList
-                style={styles.list}
-                data={filteredList}
-                renderItem={({ item }) => (
-                    <TouchableWithoutFeedback onPress={playgroundNavigate}>
-                        <Text>{item}</Text>
-                    </TouchableWithoutFeedback>
-                )}
-            /> */}
         </View>
     )
 }
