@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { StyleSheet, View, Linking, Text, TextInput } from 'react-native'
+import { StyleSheet, View, Linking, Text, TextInput, Alert } from 'react-native'
 import { Header as HeaderRNE, Icon } from 'react-native-elements'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { debounce, isArray } from 'lodash'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Actions } from 'react-native-router-flux'
+import * as RNLocalize from 'react-native-localize'
+import { $mobx } from 'mobx'
 
 // const docsNavigate = () => {
 //     Linking.openURL(`https://reactnativeelements.com/docs/${props.view}`)
@@ -111,8 +113,28 @@ export interface Translation {
 const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
     const [searchString, setSearchString] = useState<string>('')
     const [name, setName] = useState<Welcome[]>([])
-
     const [loading, setLoading] = useState(false)
+
+    // AIzaSyDQlnq2ZSWoqyTwRR_MCXWccQGGNK7uRyo
+    // https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
+    const findCoordinates = () => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lock = ` ${position.coords.latitude},${position.coords.longitude}`
+                console.log(lock)
+            },
+            (error) => Alert.alert(error.message),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        )
+    }
+    const cords = findCoordinates()
+    console.log(cords)
+    fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=48.5916672,34.5636864&key=AIzaSyDQlnq2ZSWoqyTwRR_MCXWccQGGNK7uRyo`
+    )
+        .then((res) => res.json())
+        .then((res) => console.log(res))
+
     const onChangeSearch = (e: any) => {
         const { value } = e.target
         setSearchString(value)
@@ -137,6 +159,8 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
         fetchData()
     }, [searchString])
 
+    const geo = RNLocalize.getCountry()
+    console.log(geo)
     return (
         <SafeAreaProvider>
             <HeaderRNE

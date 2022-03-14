@@ -10,9 +10,9 @@ class App extends Component {
     render(): React.ReactNode {
         return (
             <Router>
-                <Scene key="root">
+                <Scene key="root" sceneStyle={styles?.container}>
                     <Scene
-                        style={styles?.container}
+                        sceneStyle={styles?.container}
                         key="firstMainPage"
                         component={FirstMainPage}
                         title="Search"
@@ -20,7 +20,7 @@ class App extends Component {
                     />
 
                     <Scene
-                        style={styles?.container}
+                        sceneStyle={styles?.container}
                         key="secondMainPage"
                         component={SecondMainPage}
                         title="Country"

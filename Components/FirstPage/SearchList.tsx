@@ -156,30 +156,19 @@ const SearchList = ({ filter }: any) => {
     //         console.log(list)
     //     }, [filter, list])
 
-    //     const findCoordinates = () => {
-    //         navigator.geolocation.getCurrentPosition(
-    //             (position) => {
-    //                 const lock = ` ${position.coords.latitude},${position.coords.longitude}`
-    //                 console.log(lock)
-    //                 list.filter((it: any) => {
-    //                     if (
-    //                         it.latlng[0] > position.coords.latitude &&
-    //                         it.latlng[1] > position.coords.longitude
-    //                     ) {
-    //                         return (
-    //                             <Text>
-    //                                 {it.flag}
-    //                                 {it.name.common}
-    //                             </Text>
-    //                         )
-    //                     }
-    //                 })
-    //             },
-    //             (error) => Alert.alert(error.message),
-    //             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    //         )
-    //     }
-
+    // AIzaSyDQlnq2ZSWoqyTwRR_MCXWccQGGNK7uRyo
+    // https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
+    const findCoordinates = () => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lock = ` ${position.coords.latitude},${position.coords.longitude}`
+                console.log(lock)
+            },
+            (error) => Alert.alert(error.message),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        )
+    }
+    console.log(findCoordinates())
     return (
         <View style={styles.list}>
             {name.map((el: any) => {
