@@ -1,69 +1,47 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { StyleSheet, View, Text, TextInput, Alert } from 'react-native'
+import React, {
+    ReactElement,
+    ReactFragment,
+    useCallback,
+    useEffect,
+    useState,
+} from 'react'
+import {
+    StyleSheet,
+    View,
+    Text,
+    TextInput,
+    Alert,
+    TouchableOpacity,
+} from 'react-native'
 import { Header as HeaderRNE } from 'react-native-elements'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { debounce, isArray } from 'lodash'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Actions } from 'react-native-router-flux'
-import * as RNLocalize from 'react-native-localize'
+import { Countries } from '../types'
 
-type HeaderComponentProps = {
-    title?: string
-    view?: string
-}
-export interface Welcome {
-    name: Name
-    idd: Idd
-    capital: string[]
-    languages: Languages
-    flag: string
-    population: number
-    flags: string[]
-}
-
-export interface Idd {
-    root: string
-    suffixes: string[]
-}
-
-export interface Languages {
-    ukr: string
-}
-
-export interface Name {
-    common: string
-    official: string
-    nativeName: NativeName
-}
-
-export interface NativeName {
-    ukr: Translation
-}
-
-export interface Translation {
-    official: string
-    common: string
-}
-const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
+const Header: React.FunctionComponent = (props) => {
     const [searchString, setSearchString] = useState<string>('')
-    const [countries, setCountries] = useState<Welcome[]>([])
+    const [countries, setCountries] = useState<Countries[]>([])
     const [loading, setLoading] = useState(false)
-
-    const findCoordinates = () => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lock = ` ${position.coords.latitude},${position.coords.longitude}`
-                console.log(lock)
-            },
-            (error) => Alert.alert(error.message),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        )
-    }
-    const cords = findCoordinates()
-    console.log(cords)
+    const [cords, setCords] = useState('')
+    // const findCoordinates = () => {
+    //     navigator.geolocation.getCurrentPosition(
+    //         (position) => {
+    //             setCords(
+    //                 ` ${position.coords.latitude},${position.coords.longitude}`
+    //             )
+    //         },
+    //         (error) => Alert.alert(error.message),
+    //         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    //     )
+    // }
+    // findCoordinates()
 
     const onChangeSearch = (e: any) => {
+        e.persist()
+        console.log(e)
         const { value } = e.target
+        console.log(value)
         setSearchString(value)
     }
     const debouncedSearch = useCallback(debounce(onChangeSearch, 500), [])
@@ -86,8 +64,7 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
         fetchData()
     }, [searchString])
 
-    const geo = RNLocalize.getCountry()
-    console.log(geo)
+    console.log(cords)
     return (
         <SafeAreaProvider>
             <HeaderRNE
@@ -97,10 +74,14 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
                             onChange={debouncedSearch}
                             style={styles.area}
                         />
+                        <Text style={{ color: 'white', fontSize: 30 }}>
+                            Your coordinates:{cords}
+                        </Text>
                         <View style={styles.text}>
-                            {countries.map((name) => {
+                            {countries.map((name, ind) => {
                                 return (
                                     <TouchableOpacity
+                                        key={ind}
                                         onPress={() => {
                                             Actions.jump('country', name)
                                         }}
@@ -116,7 +97,6 @@ const Header: React.FunctionComponent<HeaderComponentProps> = (props) => {
                     </>
                 }
             />
-            //{' '}
         </SafeAreaProvider>
     )
 }

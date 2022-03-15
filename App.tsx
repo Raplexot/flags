@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Router, Scene } from 'react-native-router-flux'
-import Country from './Components/SecondPage/SecondMainPage'
-import Search from './Components/FirstPage/FirstMainPage'
+import { Router, Scene, Stack } from 'react-native-router-flux'
+import Country from './Components/SecondPage/CountryPage'
+import Search from './Components/FirstPage/SearchPage'
 
 class App extends Component {
     render(): React.ReactNode {
